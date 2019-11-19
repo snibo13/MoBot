@@ -39,8 +39,8 @@ const float velocity = 50;
 const int angle = 0;
 
 //Pin assignment (Ultrasonic)
-int triggerPin = TODO;
-int echoPin = TODO;
+int triggerPin = 10;
+int echoPin = 11;
 
 //Ultrasonic variables
 long duration;
@@ -56,33 +56,39 @@ void setup() {
   Serial.begin(9600);
 }
 
-//Motor demo
-//void loop() {
-//  turn(0);
-//  delay(1000);
-//  leftMotor.brake();
-//  rightMotor.brake();
-//  delay(1000);
-//  turn(20);
-//  delay(1000);
-//  leftMotor.brake();
-//  rightMotor.brake();
-//  delay(1000);
-//  turn(-20);
-//  delay(1000);
-//  leftMotor.brake();
-//  rightMotor.brake();
-//  delay(1000);
-//}
+/*
+ * Motor Demo 
+ * Place in loop
+ */
+void motorDemo() {
+  turn(0);
+  delay(1000);
+  leftMotor.brake();
+  rightMotor.brake();
+  delay(1000);
+  turn(20);
+  delay(1000);
+  leftMotor.brake();
+  rightMotor.brake();
+  delay(1000);
+  turn(-20);
+  delay(1000);
+  leftMotor.brake();
+  rightMotor.brake();
+  delay(1000);
+}
 
 
-//Line reading demo
-void loop() {
+/*
+ * Line reading demo
+ * Place in loop
+ */
+ void lineDemo() {
   readLine();
   delay(2000);
 }
 
-void readLine() {
+void readLineDemo() {
   float left = analogRead(leftSensor);
   float right = analogRead(rightSensor);
   float middle = analogRead(midSensor);
@@ -96,9 +102,28 @@ void readLine() {
   } else {
     Serial.println("No Line");
   }
-//  turn(theta);
 }
 
+
+
+
+
+void readLine() {
+  float left = analogRead(leftSensor);
+  float right = analogRead(rightSensor);
+  float middle = analofRead(midSensor);
+  float theta = 0;
+  if (left <= lineLvl) {
+    theta = TODO;
+  } else if (right <= lineLvl) {
+    theta = TODO;
+  } else if (middle <= lineLvl){
+    theta = 0;
+  } else {
+    Serial.println("No Line");
+  }
+  turn(theta);
+}
 /*
  * Turns the bot to the desired angle from the current
  * NOTE: Straightening requires a turn
