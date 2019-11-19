@@ -1,9 +1,14 @@
+/*
+ * Code for MoBot Project
+ * Fundamentals of Mechanical Engineering
+ * 24-101
+ *
+ * by Sidney Nimako-Boateng
+ */
+
+
 //Library for motor
 #include <SparkFun_TB6612.h>
-
-
-//Error fixing
-int TODO = 5;
 
 
 //Pin assignment (Line follower)
@@ -11,24 +16,26 @@ const int rightSensor = A1; //GND on Left Side orientation
 const int leftSensor = A2;
 const int midSensor = A0;
 
-
+//Line follower constants
 const int lineLvl = 200;
 
 //Pin assignment (Motor)
-int rightMotor1 = 2;
-int rightMotor2 = 4;
-int rightMotorVel = 5;
+const int rightMotor1 = 2;
+const int rightMotor2 = 4;
+const int rightMotorVel = 5;
 
-int leftMotor1 = 7;
-int leftMotor2 = 8;
-int leftMotorVel = 6;
+const int leftMotor1 = 7;
+const int leftMotor2 = 8;
+const int leftMotorVel = 6;
 
-int stdby = 9;
+const int stdby = 9;
 
+//Motor constants
 //Compensates for physical orientation and motor spin direction
-int offsetL = 1;
-int offsetR = 1;
+const int offsetL = 1;
+const int offsetR = 1;
 
+//Motor instatiation
 Motor leftMotor = Motor(leftMotor1, leftMotor2, leftMotorVel, offsetL, stdby);
 Motor rightMotor = Motor(rightMotor1, rightMotor2, rightMotorVel, offsetR, stdby);
 
@@ -43,8 +50,8 @@ int triggerPin = 10;
 int echoPin = 11;
 
 //Ultrasonic variables
-long duration;
-int distance;
+const long duration;
+const int distance;
 
 
 void setup() {
@@ -54,6 +61,17 @@ void setup() {
   pinMode(triggerPin, OUTPUT);
   pinMode(echoPin, INPUT);
   Serial.begin(9600);
+}
+
+void loop() {
+  ultrasonicDemo();
+}
+/*
+ * Ultrasonic demo
+ * Place in loop
+ */
+void ultrasonicDemo() {
+  
 }
 
 /*
@@ -104,10 +122,6 @@ void readLineDemo() {
   }
 }
 
-
-
-
-
 void readLine() {
   float left = analogRead(leftSensor);
   float right = analogRead(rightSensor);
@@ -128,6 +142,7 @@ void readLine() {
  * Turns the bot to the desired angle from the current
  * NOTE: Straightening requires a turn
  * param(theta): angle to turn to left or right
+ * TODO: Consider remapping velocities to max and min on motors
  */
 void turn(float theta) {
   float t = sensorOffset/velocity;
@@ -145,6 +160,7 @@ void turn(float theta) {
   driveBot(leftWheelVelocity, rightWheelVelocity);
 }
 
+
 /*
  * Writes the voltages necessary to drive the left and
  * right wheels at the desired velocity
@@ -154,7 +170,4 @@ void driveBot(float lVelocity, float rVelocity) {
     leftMotor.drive(lVelocity, 1000);
     rightMotor.drive(rVelocity, 1000);
     
-}
-void readDistance() {
-
 }
