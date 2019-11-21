@@ -33,7 +33,7 @@ const int stdby = 9;
 //Motor constants
 //Compensates for physical orientation and motor spin direction
 const int offsetL = 1;
-const int offsetR = 1;
+const int offsetR = -1;
 
 //Motor instatiation
 Motor leftMotor = Motor(leftMotor1, leftMotor2, leftMotorVel, offsetL, stdby);
@@ -42,7 +42,7 @@ Motor rightMotor = Motor(rightMotor1, rightMotor2, rightMotorVel, offsetR, stdby
 //Physical variables
 const float sensorOffset = 5;
 const float radius = 5;
-const float velocity = 50;
+const float velocity = 200;
 const int angle = 0;
 
 //Pin assignment (Ultrasonic)
@@ -50,8 +50,8 @@ int triggerPin = 10;
 int echoPin = 11;
 
 //Ultrasonic variables
-const long duration;
-const int distance;
+long duration;
+int distance;
 
 
 void setup() {
@@ -60,19 +60,38 @@ void setup() {
   pinMode(midSensor, INPUT);
   pinMode(triggerPin, OUTPUT);
   pinMode(echoPin, INPUT);
+  //Clear the triggerPin
+  digitalWrite(triggerPin, LOW);
   Serial.begin(9600);
 }
 
 void loop() {
-  ultrasonicDemo();
+  driveBot(200,200);
+  delay(2000);
+  driveBot(0,0);
+  delay(1000);
 }
 /*
  * Ultrasonic demo
  * Place in loop
  */
 void ultrasonicDemo() {
-  
+  delay(2);
+  //Pin high for 10 useconds
+  digitalWrite(triggerPin, HIGH);
+  delay(10);
+  digitalWrite(triggerPin, LOW);
+
+  //Read return time
+  duration = pulseIn(echoPin, HIGH);
+
+  //Calculate distanse fromecho time
+  distance = duration * 0.034/ 2.0;
+
+  Serial.println(distance);
+  delay(200);
 }
+
 
 /*
  * Motor Demo 
@@ -125,12 +144,12 @@ void readLineDemo() {
 void readLine() {
   float left = analogRead(leftSensor);
   float right = analogRead(rightSensor);
-  float middle = analofRead(midSensor);
+  float middle = analogRead(midSensor);
   float theta = 0;
   if (left <= lineLvl) {
-    theta = TODO;
+    theta = 1;
   } else if (right <= lineLvl) {
-    theta = TODO;
+    theta = 1;
   } else if (middle <= lineLvl){
     theta = 0;
   } else {
@@ -145,18 +164,18 @@ void readLine() {
  * TODO: Consider remapping velocities to max and min on motors
  */
 void turn(float theta) {
-  float t = sensorOffset/velocity;
-  Serial.println(t);
-  float w = theta/t;
-  Serial.println(theta);
-  float leftWheelVelocity = velocity - w;
-  float rightWheelVelocity = velocity + w;
+//  float t = sensorOffset/velocity;
+//  Serial.println(t);
+//  float w = theta/t;
+//  Serial.println(theta);
+  float leftWheelVelocity = velocity - theta;
+  float rightWheelVelocity = velocity + theta;
   Serial.println(leftWheelVelocity);
   Serial.println(rightWheelVelocity);
-  if (leftWheelVelocity == rightWheelVelocity == 0) {
-    leftMotor.brake();
-    rightMotor.brake();
-  }
+//  if (leftWheelVelocity == rightWheelVelocity == 0) {
+//    leftMotor.brake();
+//    rightMotor.brake();
+//  }
   driveBot(leftWheelVelocity, rightWheelVelocity);
 }
 
